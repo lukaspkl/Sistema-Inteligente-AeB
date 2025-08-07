@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Sistema de gestão hoteleiro - Design system moderno e corporativo */
+
+@layer base {
+  :root {
+    /* MODO CLARO - Paleta HotelSys */
+    /* Fundo principal: #F9FAFB (cinza quase branco) */
+    --background: 249 250 251;
+    --foreground: 17 24 39; /* #111827 (preto suave) */
+
+    /* Cartões: #FFFFFF (branco puro) */
+    --card: 0 0% 100%;
+    --card-foreground: 17 24 39;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 17 24 39;
+
+    /* Cores primárias - azul médio #3B82F6 para destaques */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 217 91% 85%;
+    --primary-glow: 217 91% 70%;
+
+    /* Amarelo suave #FACC15 para ícones/alertas */
+    --secondary: 48 96% 53%;
+    --secondary-foreground: 17 24 39;
+    --secondary-light: 48 96% 90%;
+
+    /* Cores neutras modernas */
+    --muted: 249 250 251;
+    --muted-foreground: 107 114 128; /* #6B7280 (cinza médio) */
+
+    --accent: 249 250 251;
+    --accent-foreground: 17 24 39;
+
+    /* Cores de status */
+    --success: 158 64% 52%; /* #10B981 */
+    --success-foreground: 0 0% 100%;
+    --warning: 45 97% 54%; /* #FCD34D */
+    --warning-foreground: 17 24 39;
+    --destructive: 0 84% 60%; /* #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+
+    /* Elementos de interface */
+    --border: 229 24% 87%; /* #E5E7EB (cinza leve) */
+    --input: 0 0% 100%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar light mode */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 17 24 39;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 249 250 251;
+    --sidebar-accent-foreground: 17 24 39;
+    --sidebar-border: 229 24% 87%;
+    --sidebar-ring: 217 91% 60%;
+
+    /* Gradientes light mode */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
+    --gradient-secondary: linear-gradient(135deg, hsl(48 96% 53%), hsl(48 96% 60%));
+    --gradient-hero: linear-gradient(135deg, hsl(249 250 251) 0%, hsl(0 0% 100%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(249 250 251) 100%);
+
+    /* Sombras suaves light mode - box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) */
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
+    --shadow-md: 0 2px 8px 0 hsl(0 0% 0% / 0.08);
+    --shadow-lg: 0 4px 12px -2px hsl(0 0% 0% / 0.12);
+    --shadow-xl: 0 8px 25px -5px hsl(0 0% 0% / 0.15);
+    --shadow-glow: 0 0 30px hsl(48 96% 53% / 0.25);
+
+    /* Transições suaves */
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    /* MODO ESCURO - Paleta HotelSys */
+    /* Fundo principal: #1E1E2F (azul grafite escuro) */
+    --background: 240 12% 15%;
+    --foreground: 249 250 251; /* #F9FAFB */
+
+    /* Cartões: #2C2C3A */
+    --card: 240 12% 20%;
+    --card-foreground: 249 250 251;
+
+    --popover: 240 12% 20%;
+    --popover-foreground: 249 250 251;
+
+    /* Cores primárias - azul claro #60A5FA para destaques */
+    --primary: 217 91% 70%;
+    --primary-foreground: 240 12% 15%;
+    --primary-light: 217 91% 85%;
+    --primary-glow: 217 91% 75%;
+
+    /* Amarelo claro #FDE68A para ícones/alertas */
+    --secondary: 48 96% 76%;
+    --secondary-foreground: 240 12% 15%;
+    --secondary-light: 48 96% 85%;
+
+    /* Cores neutras modernas */
+    --muted: 240 12% 20%;
+    --muted-foreground: 156 163 175; /* #9CA3AF (cinza médio) */
+
+    --accent: 240 12% 20%;
+    --accent-foreground: 249 250 251;
+
+    /* Cores de status dark */
+    --success: 158 64% 52%; /* #34D399 */
+    --success-foreground: 240 12% 15%;
+    --warning: 45 97% 54%; /* #FBBF24 */
+    --warning-foreground: 240 12% 15%;
+    --destructive: 0 84% 60%; /* #F87171 */
+    --destructive-foreground: 249 250 251;
+
+    /* Elementos de interface */
+    --border: 240 12% 25%; /* #3B3B4D (cinza profundo) */
+    --input: 240 12% 20%;
+    --ring: 217 91% 70%;
+
+    /* Sidebar dark mode */
+    --sidebar-background: 240 12% 18%; /* #1E1E2F */
+    --sidebar-foreground: 249 250 251; /* #F9FAFB */
+    --sidebar-primary: 48 96% 53%; /* #FACC15 - amarelo para ativo */
+    --sidebar-primary-foreground: 240 12% 18%;
+    --sidebar-accent: 215 20% 30%; /* #334155 - hover */
+    --sidebar-accent-foreground: 249 250 251;
+    --sidebar-border: 220 13% 18%;
+    --sidebar-ring: 48 96% 53%;
+
+    /* Gradientes dark mode */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 70%), hsl(217 91% 75%));
+    --gradient-secondary: linear-gradient(135deg, hsl(48 96% 76%), hsl(48 96% 80%));
+    --gradient-hero: linear-gradient(135deg, hsl(17 24 39) 0%, hsl(240 12% 15%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(240 12% 20%) 0%, hsl(240 12% 15%) 100%);
+
+    /* Sombras dark mode - box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) */
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.2);
+    --shadow-md: 0 2px 12px 0 hsl(0 0% 0% / 0.3);
+    --shadow-lg: 0 4px 16px -2px hsl(0 0% 0% / 0.4);
+    --shadow-xl: 0 8px 30px -5px hsl(0 0% 0% / 0.5);
+    --shadow-glow: 0 0 30px hsl(48 96% 76% / 0.3);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Scrollbar personalizada */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary));
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary-glow));
+  }
+}
+
+@layer components {
+  /* Animações personalizadas */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  /* Efeitos hover elegantes */
+  .hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Gradientes de texto */
+  .text-gradient-primary {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-secondary {
+    background: var(--gradient-secondary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

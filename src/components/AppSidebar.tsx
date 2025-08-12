@@ -25,62 +25,55 @@ import {
 } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 
-const sectors = [
+const abSectors = [
   { 
-    title: "Dashboard", 
+    title: "Dashboard A&B", 
     url: "/", 
     icon: Home, 
     active: true,
-    description: "Visão geral do sistema"
+    description: "Visão geral do módulo A&B"
   },
   { 
-    title: "A&B", 
-    url: "/ab", 
+    title: "Estoque", 
+    url: "/estoque", 
     icon: ChefHat, 
     active: true,
-    description: "Alimentos e Bebidas" 
+    description: "Gestão de estoque A&B" 
   },
   { 
-    title: "Governança", 
-    url: "/governanca", 
-    icon: Crown, 
-    active: false,
-    description: "Gestão de quartos e limpeza" 
-  },
-  { 
-    title: "Compras", 
+    title: "Compras A&B", 
     url: "/compras", 
     icon: ShoppingCart, 
-    active: false,
-    description: "Gestão de fornecedores" 
+    active: true,
+    description: "Pedidos e fornecedores" 
   },
   { 
-    title: "Manutenção", 
-    url: "/manutencao", 
-    icon: Wrench, 
-    active: false,
-    description: "Ordem de serviços" 
-  },
-  { 
-    title: "RH Operacional", 
-    url: "/rh", 
-    icon: Users, 
-    active: false,
-    description: "Recursos humanos" 
-  },
-  { 
-    title: "Diretoria", 
-    url: "/diretoria", 
-    icon: Building, 
-    active: false,
-    description: "Relatórios executivos" 
-  },
-  { 
-    title: "Eventos e Comercial", 
-    url: "/eventos", 
+    title: "Notas Fiscais", 
+    url: "/notas-fiscais", 
     icon: Calendar, 
-    active: false,
-    description: "Gestão de eventos" 
+    active: true,
+    description: "Upload e lançamentos" 
+  },
+  { 
+    title: "Perdas", 
+    url: "/perdas", 
+    icon: Building, 
+    active: true,
+    description: "Controle de perdas A&B" 
+  },
+  { 
+    title: "Relatórios A&B", 
+    url: "/relatorios", 
+    icon: Users, 
+    active: true,
+    description: "Análises e reports" 
+  },
+  { 
+    title: "Configurações A&B", 
+    url: "/configuracoes", 
+    icon: Wrench, 
+    active: true,
+    description: "Parâmetros do módulo" 
   },
 ];
 
@@ -131,12 +124,12 @@ export function AppSidebar() {
 
         <SidebarGroup className="px-4 py-6">
           <SidebarGroupLabel className="text-sidebar-foreground/70 text-xs uppercase tracking-wider mb-4 opacity-70">
-            {!collapsed && "Setores Operacionais"}
+            {!collapsed && "Módulo A&B"}
           </SidebarGroupLabel>
           
           <SidebarGroupContent>
             <SidebarMenu className="space-y-2">
-              {sectors.map((sector) => (
+              {abSectors.map((sector) => (
                 <SidebarMenuItem key={sector.title}>
                   <SidebarMenuButton asChild className="p-0">
                     {sector.active ? (
@@ -146,9 +139,9 @@ export function AppSidebar() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <span className="font-medium">{sector.title}</span>
-                              {sector.url === "/ab" && (
+                              {sector.url === "/" && (
                                 <Badge variant="secondary" className="text-xs px-2 py-0.5">
-                                  Ativo
+                                  Principal
                                 </Badge>
                               )}
                             </div>

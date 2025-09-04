@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import UnidadeConverter from "@/components/UnidadeConverter";
 
 interface Produto {
   id: string;
@@ -44,6 +45,12 @@ export default function ABEstoque() {
     responsavel: ""
   });
 
+  // Estados para conversão de unidades
+  const [quantidadeBase, setQuantidadeBase] = useState<number>(0);
+  const [valorUnitarioBase, setValorUnitarioBase] = useState<number>(0);
+  const [unidadeSelecionada, setUnidadeSelecionada] = useState<string>("");
+  const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
+
   useEffect(() => {
     fetchProdutos();
   }, []);
@@ -57,10 +64,23 @@ export default function ABEstoque() {
         .order('nome', { ascending: true });
 
       if (error) throw error;
-      setProdutos(data || []);
+      
+      // Adaptar dados para incluir validade como null se não existir
+      const produtosAdaptados = data?.map(produto => ({
+        ...produto,
+        validade: null // Temporário até implementar campo validade
+      })) || [];
+      
+      setProdutos(produtosAdaptados);
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
     }
+  };
+
+  const handleConversaoChange = (qtdBase: number, valorBase: number, unidade: string) => {
+    setQuantidadeBase(qtdBase);
+    setValorUnitarioBase(valorBase);
+    setUnidadeSelecionada(unidade);
   };
 
   const handleLancamentoManual = async () => {
@@ -68,6 +88,15 @@ export default function ABEstoque() {
       toast({
         title: "Campos obrigatórios",
         description: "Preencha produto, quantidade e validade.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!quantidadeBase || !valorUnitarioBase) {
+      toast({
+        title: "Conversão de unidade",
+        description: "Selecione uma unidade válida e valores corretos.",
         variant: "destructive"
       });
       return;
@@ -86,31 +115,29 @@ export default function ABEstoque() {
       let produtoId;
 
       if (produtoExistente) {
-        // Atualizar produto existente
-        const novoEstoque = produtoExistente.estoque_atual + parseInt(formData.quantidade);
+        // Atualizar produto existente - usar quantidade base
+        const novoEstoque = produtoExistente.estoque_atual + quantidadeBase;
         
         const { error: updateError } = await supabase
           .from('produtos')
           .update({ 
             estoque_atual: novoEstoque,
-            valor_unitario: parseFloat(formData.valor_unitario || '0'),
-            validade: formData.validade
+            valor_unitario: valorUnitarioBase
           })
           .eq('id', produtoExistente.id);
 
         if (updateError) throw updateError;
         produtoId = produtoExistente.id;
       } else {
-        // Criar novo produto
+        // Criar novo produto - usar valores base
         const { data: novoProduto, error: insertError } = await supabase
           .from('produtos')
           .insert([{
             nome: formData.produto_nome,
             categoria: formData.categoria || 'Geral',
-            estoque_atual: parseInt(formData.quantidade),
-            unidade_medida: formData.unidade_medida || 'un',
-            valor_unitario: parseFloat(formData.valor_unitario || '0'),
-            validade: formData.validade,
+            estoque_atual: quantidadeBase,
+            unidade_medida: formData.unidade_medida || 'UN',
+            valor_unitario: valorUnitarioBase,
             quantidade_minima: 1,
             ativo: true
           }])
@@ -127,8 +154,8 @@ export default function ABEstoque() {
         .insert([{
           produto_id: produtoId,
           tipo_movimentacao: 'entrada_manual',
-          quantidade: parseInt(formData.quantidade),
-          motivo: 'Lançamento manual',
+          quantidade: quantidadeBase,
+          motivo: `Lançamento manual: ${formData.quantidade} ${unidadeSelecionada} convertido para ${quantidadeBase} ${formData.unidade_medida || 'UN'}`,
           responsavel: formData.responsavel || 'Sistema'
         }]);
 
@@ -255,18 +282,17 @@ export default function ABEstoque() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="unidade_medida">Unidade</Label>
+                  <Label htmlFor="unidade_medida">Unidade Base</Label>
                   <Select value={formData.unidade_medida} onValueChange={(value) => setFormData({...formData, unidade_medida: value})}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Unidade de medida" />
+                      <SelectValue placeholder="Unidade base do produto" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="un">Unidade</SelectItem>
-                      <SelectItem value="cx">Caixa</SelectItem>
-                      <SelectItem value="kg">Quilograma</SelectItem>
-                      <SelectItem value="g">Grama</SelectItem>
-                      <SelectItem value="l">Litro</SelectItem>
-                      <SelectItem value="ml">Mililitro</SelectItem>
+                      <SelectItem value="UN">Unidade</SelectItem>
+                      <SelectItem value="KG">Quilograma</SelectItem>
+                      <SelectItem value="L">Litro</SelectItem>
+                      <SelectItem value="G">Grama</SelectItem>
+                      <SelectItem value="ML">Mililitro</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -303,6 +329,19 @@ export default function ABEstoque() {
                   />
                 </div>
               </div>
+
+              {/* Conversor de Unidades */}
+              {formData.unidade_medida && (
+                <div className="p-4 bg-muted/50 rounded-xl">
+                  <UnidadeConverter
+                    produtoId="novo-produto"
+                    unidadeBase={formData.unidade_medida}
+                    onConversaoChange={handleConversaoChange}
+                    quantidade={formData.quantidade}
+                    valorUnitario={formData.valor_unitario}
+                  />
+                </div>
+              )}
 
               <div className="flex items-center gap-2 p-3 rounded-xl bg-orange-50 border border-orange-200">
                 <AlertCircle className="h-4 w-4 text-orange-600" />

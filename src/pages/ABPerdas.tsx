@@ -92,7 +92,16 @@ export default function ABPerdas() {
         .limit(50);
 
       if (error) throw error;
-      setPerdas(data || []);
+      
+      // Adaptar dados para corresponder ao tipo Perda
+      const perdasAdaptadas = data?.map(perda => ({
+        ...perda,
+        produto_id: perda.id_produto,
+        tipo: perda.motivo || 'quebra',
+        origem_estoque: perda.atualizou_estoque || false
+      })) || [];
+      
+      setPerdas(perdasAdaptadas);
     } catch (error) {
       console.error('Erro ao buscar perdas:', error);
     }
@@ -159,10 +168,10 @@ export default function ABPerdas() {
       const { error } = await supabase
         .from('perdas')
         .insert([{
-          produto_id: produtoId,
+          id_produto: produtoId,
           quantidade: parseInt(perdaForm.quantidade),
-          tipo: perdaForm.tipo,
-          origem_estoque: perdaForm.origem_estoque,
+          motivo: perdaForm.tipo,
+          atualizou_estoque: perdaForm.origem_estoque,
           valor_perda: valorPerda,
           responsavel: perdaForm.responsavel || 'Sistema',
           observacoes: perdaForm.observacoes,

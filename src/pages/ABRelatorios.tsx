@@ -61,7 +61,7 @@ export default function ABRelatorios() {
       // Buscar dados dos produtos
       const { data: produtos, error: produtosError } = await supabase
         .from('produtos')
-        .select('estoque_atual, valor_unitario, validade')
+        .select('estoque_atual, valor_unitario')
         .eq('ativo', true);
 
       if (produtosError) throw produtosError;
@@ -86,23 +86,10 @@ export default function ABRelatorios() {
       const perdasMes = perdas?.reduce((sum, p) => sum + (p.valor_perda || 0), 0) || 0;
       const percentualPerdas = valorEstoque > 0 ? (perdasMes / valorEstoque) * 100 : 0;
 
-      // Calcular vencimentos
-      const hoje = new Date();
-      const data7dias = new Date(hoje.getTime() + 7 * 24 * 60 * 60 * 1000);
-      const data15dias = new Date(hoje.getTime() + 15 * 24 * 60 * 60 * 1000);
-      const data30dias = new Date(hoje.getTime() + 30 * 24 * 60 * 60 * 1000);
-
-      const vencimentos7dias = produtos?.filter(p => 
-        p.validade && new Date(p.validade) <= data7dias && new Date(p.validade) > hoje
-      ).length || 0;
-      
-      const vencimentos15dias = produtos?.filter(p => 
-        p.validade && new Date(p.validade) <= data15dias && new Date(p.validade) > data7dias
-      ).length || 0;
-      
-      const vencimentos30dias = produtos?.filter(p => 
-        p.validade && new Date(p.validade) <= data30dias && new Date(p.validade) > data15dias
-      ).length || 0;
+      // Simular cálculo de vencimentos (campo validade não existe ainda)
+      const vencimentos7dias = 0;
+      const vencimentos15dias = 0; 
+      const vencimentos30dias = 0;
 
       setRelatorio({
         valorEstoque,

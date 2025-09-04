@@ -47,35 +47,47 @@ export default function UnidadeConverter({
   const fetchUnidades = async () => {
     setLoading(true);
     try {
-      // Por enquanto, simular apenas unidades básicas
-      // Futuramente implementar tabela de conversões
-      const unidadesBasicas = [
+      // Sempre incluir a unidade base com fator 1
+      const unidadesLista: UnidadeConversao[] = [
         { id: 'base', unidade: unidadeBase, fator_conversao: 1, produto_id: produtoId }
       ];
 
-      // Adicionar algumas conversões padrão baseadas na unidade
-      if (unidadeBase === 'UN') {
-        unidadesBasicas.push(
-          { id: 'cx-12', unidade: 'CX', fator_conversao: 12, produto_id: produtoId },
-          { id: 'pacote-6', unidade: 'PACOTE', fator_conversao: 6, produto_id: produtoId }
-        );
-      } else if (unidadeBase === 'KG') {
-        unidadesBasicas.push(
-          { id: 'cx-20', unidade: 'CX', fator_conversao: 20, produto_id: produtoId },
-          { id: 'fardo-50', unidade: 'FARDO', fator_conversao: 50, produto_id: produtoId }
-        );
-      } else if (unidadeBase === 'L') {
-        unidadesBasicas.push(
-          { id: 'cx-12l', unidade: 'CX', fator_conversao: 12, produto_id: produtoId }
-        );
-      }
-
-      setUnidades(unidadesBasicas);
+      // Por enquanto, usar conversões simuladas por produto específico
+      // TODO: Implementar tabela unidades_conversao no banco de dados
+      const conversoesPorProduto = await getConversoesSimuladas(produtoId, unidadeBase);
+      
+      unidadesLista.push(...conversoesPorProduto);
+      setUnidades(unidadesLista);
     } catch (error) {
       console.error('Erro ao configurar unidades:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Função simulada - futuramente substituir por consulta ao banco
+  const getConversoesSimuladas = async (produtoId: string, unidadeBase: string): Promise<UnidadeConversao[]> => {
+    // Simular busca específica por produto no futuro
+    // Por enquanto, retornar conversões baseadas na unidade base
+    const conversoes: UnidadeConversao[] = [];
+    
+    if (unidadeBase === 'UN') {
+      conversoes.push(
+        { id: 'cx-12', unidade: 'CX', fator_conversao: 12, produto_id: produtoId },
+        { id: 'pacote-6', unidade: 'PACOTE', fator_conversao: 6, produto_id: produtoId }
+      );
+    } else if (unidadeBase === 'KG') {
+      conversoes.push(
+        { id: 'cx-20', unidade: 'CX', fator_conversao: 20, produto_id: produtoId },
+        { id: 'fardo-50', unidade: 'FARDO', fator_conversao: 50, produto_id: produtoId }
+      );
+    } else if (unidadeBase === 'L') {
+      conversoes.push(
+        { id: 'caixa-12', unidade: 'CAIXA', fator_conversao: 12, produto_id: produtoId }
+      );
+    }
+    
+    return conversoes;
   };
 
   const calcularConversao = () => {

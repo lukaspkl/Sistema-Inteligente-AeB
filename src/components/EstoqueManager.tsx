@@ -54,21 +54,9 @@ export default function EstoqueManager() {
   });
   const [loading, setLoading] = useState(true);
   const [produtos, setProdutos] = useState<Produto[]>([]);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isCadastroDialogOpen, setIsCadastroDialogOpen] = useState(false);
+  const [fornecedores, setFornecedores] = useState<any[]>([]);
 
-  // Estados para lançamento manual
-  const [produtoSelecionado, setProdutoSelecionado] = useState("");
-  const [quantidade, setQuantidade] = useState("");
-  const [responsavel, setResponsavel] = useState("");
 
-  // Estados para cadastro de produto
-  const [nomeProduto, setNomeProduto] = useState("");
-  const [categoria, setCategoria] = useState("");
-  const [unidadeMedida, setUnidadeMedida] = useState("");
-  const [quantidadeMinima, setQuantidadeMinima] = useState("");
-  const [estoqueInicial, setEstoqueInicial] = useState("");
-  const [valorCusto, setValorCusto] = useState("");
 
   useEffect(() => {
     carregarDadosEstoque();
@@ -145,6 +133,10 @@ export default function EstoqueManager() {
         }));
       }
 
+      // Buscar fornecedores para o EstoqueVisualizacao
+      const { data: forns } = await supabaseClient.from('fornecedores').select('id, nome');
+      setFornecedores(forns || []);
+
     } catch (error) {
       console.error('Erro geral:', error);
       toast({
@@ -220,137 +212,8 @@ export default function EstoqueManager() {
     });
   };
 
-  const lancamentoManual = async () => {
-    if (!produtoSelecionado || !quantidade || !responsavel) {
-      toast({
-        title: "Campos obrigatórios",
-        description: "Preencha todos os campos",
-        variant: "destructive",
-      });
-      return;
-    }
 
-    try {
-      const produto = produtos.find(p => p.id === produtoSelecionado);
-      if (!produto) throw new Error('Produto não encontrado');
 
-      const qtd = parseFloat(quantidade);
-      if (qtd <= 0) throw new Error('Quantidade deve ser maior que zero');
-
-      // Atualizar estoque do produto
-      const { error: errorUpdate } = await supabaseClient
-        .from('produtos')
-        .update({
-          estoque_atual: produto.estoque_atual + qtd
-        })
-        .eq('id', produtoSelecionado);
-
-      if (errorUpdate) throw errorUpdate;
-
-      // Registrar movimentação
-      const { error: errorMov } = await supabaseClient
-        .from('estoque_movimentacoes')
-        .insert({
-          produto_id: produtoSelecionado,
-          tipo_movimentacao: 'entrada_manual',
-          quantidade: qtd,
-          responsavel,
-          motivo: 'Lançamento manual'
-        });
-
-      if (errorMov) throw errorMov;
-
-      toast({
-        title: "Lançamento realizado",
-        description: `${qtd} ${produto.unidade_medida} de ${produto.nome} adicionado ao estoque`,
-      });
-
-      // Limpar form e recarregar
-      setProdutoSelecionado("");
-      setQuantidade("");
-      setResponsavel("");
-      setIsDialogOpen(false);
-      carregarDadosEstoque();
-
-    } catch (error) {
-      console.error('Erro no lançamento:', error);
-      toast({
-        title: "Erro",
-        description: "Erro ao realizar lançamento manual",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const cadastrarProduto = async () => {
-    if (!nomeProduto || !unidadeMedida) {
-      toast({
-        title: "Campos obrigatórios",
-        description: "Preencha o nome do produto e unidade de medida",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      const estoque = estoqueInicial ? parseFloat(estoqueInicial) : 0;
-      const qtdMinima = quantidadeMinima ? parseFloat(quantidadeMinima) : 0;
-
-      // Inserir novo produto
-      const { data: novoProduto, error: errorProduto } = await supabaseClient
-        .from('produtos')
-        .insert({
-          nome: nomeProduto,
-          categoria: categoria || null,
-          unidade_medida: unidadeMedida,
-          quantidade_minima: qtdMinima,
-          estoque_atual: estoque,
-          ativo: true
-        })
-        .select()
-        .single();
-
-      if (errorProduto) throw errorProduto;
-
-      // Se tem estoque inicial, criar movimentação
-      if (estoque > 0) {
-        const { error: errorMov } = await supabaseClient
-          .from('estoque_movimentacoes')
-          .insert({
-            produto_id: novoProduto!.id,
-            tipo_movimentacao: 'entrada_inicial',
-            quantidade: estoque,
-            responsavel: 'Sistema',
-            motivo: 'Estoque inicial do cadastro'
-          });
-
-        if (errorMov) throw errorMov;
-      }
-
-      toast({
-        title: "Produto cadastrado",
-        description: `${nomeProduto} foi cadastrado com sucesso!`,
-      });
-
-      // Limpar form e recarregar
-      setNomeProduto("");
-      setCategoria("");
-      setUnidadeMedida("");
-      setQuantidadeMinima("");
-      setEstoqueInicial("");
-      setValorCusto("");
-      setIsCadastroDialogOpen(false);
-      carregarDadosEstoque();
-
-    } catch (error) {
-      console.error('Erro ao cadastrar produto:', error);
-      toast({
-        title: "Erro",
-        description: "Erro ao cadastrar produto",
-        variant: "destructive",
-      });
-    }
-  };
 
   if (loading) {
     return (
@@ -485,207 +348,9 @@ export default function EstoqueManager() {
         </Card>
       </div>
 
-      {/* Lançamento Manual */}
-      <Card className="bg-card shadow-elegant-md border-0 rounded-xl">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-success" />
-                Lançamento Manual
-              </CardTitle>
-              <CardDescription>
-                Adicione produtos ao estoque manualmente
-              </CardDescription>
-            </div>
-            <div className="flex gap-2">
-              <Dialog open={isCadastroDialogOpen} onOpenChange={setIsCadastroDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="outline" className="border-primary text-primary hover:bg-primary/10">
-                    <Package className="mr-2 h-4 w-4" />
-                    Cadastrar Produto
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Cadastrar Novo Produto</DialogTitle>
-                    <DialogDescription>
-                      Adicione um novo produto ao catálogo de estoque
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="nomeProduto">Nome do Produto *</Label>
-                      <Input
-                        id="nomeProduto"
-                        placeholder="Ex: Arroz 5kg Tio João"
-                        value={nomeProduto}
-                        onChange={(e) => setNomeProduto(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="categoria">Categoria</Label>
-                      <Input
-                        id="categoria"
-                        placeholder="Ex: Grãos, Limpeza, Bebidas"
-                        value={categoria}
-                        onChange={(e) => setCategoria(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="unidadeMedida">Unidade de Medida *</Label>
-                      <Select value={unidadeMedida} onValueChange={setUnidadeMedida}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione a unidade" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="kg">Quilograma (kg)</SelectItem>
-                          <SelectItem value="g">Grama (g)</SelectItem>
-                          <SelectItem value="L">Litro (L)</SelectItem>
-                          <SelectItem value="ml">Mililitro (ml)</SelectItem>
-                          <SelectItem value="un">Unidade (un)</SelectItem>
-                          <SelectItem value="cx">Caixa (cx)</SelectItem>
-                          <SelectItem value="pct">Pacote (pct)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="quantidadeMinima">Quantidade Mínima</Label>
-                      <Input
-                        id="quantidadeMinima"
-                        type="number"
-                        placeholder="Para alertas de estoque baixo"
-                        value={quantidadeMinima}
-                        onChange={(e) => setQuantidadeMinima(e.target.value)}
-                        min="0"
-                        step="0.01"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="estoqueInicial">Estoque Inicial</Label>
-                      <Input
-                        id="estoqueInicial"
-                        type="number"
-                        placeholder="Quantidade atual em estoque"
-                        value={estoqueInicial}
-                        onChange={(e) => setEstoqueInicial(e.target.value)}
-                        min="0"
-                        step="0.01"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="valorCusto">Valor de Custo</Label>
-                      <Input
-                        id="valorCusto"
-                        type="number"
-                        placeholder="Custo por unidade"
-                        value={valorCusto}
-                        onChange={(e) => setValorCusto(e.target.value)}
-                        min="0"
-                        step="0.01"
-                      />
-                    </div>
-                    <Button
-                      onClick={cadastrarProduto}
-                      className="w-full bg-primary hover:bg-primary/90"
-                      disabled={!nomeProduto || !unidadeMedida}
-                    >
-                      Cadastrar Produto
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="bg-success hover:bg-success/90">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Lançar Entrada
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Lançamento Manual de Entrada</DialogTitle>
-                    <DialogDescription>
-                      Adicione produtos ao estoque manualmente
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="produto">Produto</Label>
-                      <Select value={produtoSelecionado} onValueChange={setProdutoSelecionado}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione um produto" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {produtos.map((produto) => (
-                            <SelectItem key={produto.id} value={produto.id}>
-                              {produto.nome} ({produto.unidade_medida})
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label htmlFor="quantidade">Quantidade</Label>
-                      <Input
-                        id="quantidade"
-                        type="number"
-                        placeholder="Digite a quantidade"
-                        value={quantidade}
-                        onChange={(e) => setQuantidade(e.target.value)}
-                        min="0.01"
-                        step="0.01"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="responsavel">Responsável</Label>
-                      <Input
-                        id="responsavel"
-                        placeholder="Nome do responsável"
-                        value={responsavel}
-                        onChange={(e) => setResponsavel(e.target.value)}
-                      />
-                    </div>
-                    <Button
-                      onClick={lancamentoManual}
-                      className="w-full bg-success hover:bg-success/90"
-                      disabled={!produtoSelecionado || !quantidade || !responsavel}
-                    >
-                      Confirmar Lançamento
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {resumoEstoque.ultimasMovimentacoes.length > 0 && (
-            <div>
-              <h4 className="font-medium mb-3">Últimas Movimentações</h4>
-              <div className="space-y-2">
-                {resumoEstoque.ultimasMovimentacoes.map((mov: any, index: number) => (
-                  <div key={index} className="flex items-center justify-between p-2 rounded bg-muted/30">
-                    <div>
-                      <p className="text-sm font-medium">{mov.produtos?.nome || 'Produto'}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {mov.tipo_movimentacao} • {new Date(mov.data_movimentacao).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <Badge variant="outline">
-                      +{mov.quantidade}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
 
       {/* Visualização do Estoque */}
-      <EstoqueVisualizacao />
+      <EstoqueVisualizacao fornecedores={fornecedores} />
     </div>
   );
 }

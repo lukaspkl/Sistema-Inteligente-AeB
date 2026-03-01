@@ -19,66 +19,62 @@
     --popover: 0 0% 99%;
     --popover-foreground: 221 39% 11%;
 
-    /* Cores primárias - azul médio #3B82F6 para destaques */
-    --primary: 217 91% 60%;
+    /* Cores primárias - Neon Green Tech */
+    --primary: 153 60% 53%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 217 91% 85%;
-    --primary-glow: 217 91% 70%;
+    --primary-light: 153 60% 85%;
+    --primary-glow: 153 60% 60%;
 
-    /* Amarelo suave #FACC15 para ícones/alertas */
+    /* Amarelo vibrante #FACC15 para alertas */
     --secondary: 48 96% 53%;
     --secondary-foreground: 221 39% 11%;
     --secondary-light: 48 96% 90%;
 
     /* Cores neutras modernas */
-    --muted: 220 14% 93%;
+    --muted: 220 14% 90%;
     --muted-foreground: 220 9% 46%;
-    /* #6B7280 (cinza médio) */
 
-    --accent: 220 14% 93%;
+    --accent: 220 14% 90%;
     --accent-foreground: 221 39% 11%;
 
     /* Cores de status */
     --success: 158 64% 52%;
-    /* #10B981 */
     --success-foreground: 0 0% 100%;
     --warning: 45 97% 54%;
-    /* #FCD34D */
     --warning-foreground: 221 39% 11%;
     --destructive: 0 84% 60%;
-    /* #EF4444 */
     --destructive-foreground: 0 0% 100%;
 
     /* Elementos de interface */
     --border: 229 24% 87%;
-    /* #E5E7EB (cinza leve) */
     --input: 0 0% 100%;
-    --ring: 217 91% 60%;
+    --ring: 153 60% 53%;
 
-    --radius: 0.75rem;
+    /* Geometria Bold & Tech: Bordas mais afiadas */
+    --radius: 0.25rem;
 
     /* Sidebar light mode */
-    --sidebar-background: 0 0% 99%;
+    --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 221 39% 11%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary: 153 60% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 220 14% 96%;
     --sidebar-accent-foreground: 221 39% 11%;
     --sidebar-border: 229 24% 87%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-ring: 153 60% 53%;
 
     /* Gradientes light mode */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
+    --gradient-primary: linear-gradient(135deg, hsl(153 60% 53%), hsl(153 60% 63%));
     --gradient-secondary: linear-gradient(135deg, hsl(48 96% 53%), hsl(48 96% 60%));
-    --gradient-hero: linear-gradient(135deg, hsl(220 14% 96%) 0%, hsl(0 0% 99%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 99%) 0%, hsl(220 14% 96%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(220 14% 93%) 0%, hsl(0 0% 98%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 14% 96%) 100%);
 
-    /* Sombras suaves light mode - box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) */
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
-    --shadow-md: 0 2px 8px 0 hsl(0 0% 0% / 0.08);
-    --shadow-lg: 0 4px 12px -2px hsl(0 0% 0% / 0.12);
-    --shadow-xl: 0 8px 25px -5px hsl(0 0% 0% / 0.15);
-    --shadow-glow: 0 0 30px hsl(48 96% 53% / 0.25);
+    /* Sombras duras e tecnológicas */
+    --shadow-sm: 4px 4px 0px 0px hsl(0 0% 0% / 0.05);
+    --shadow-md: 6px 6px 0px 0px hsl(221 39% 11% / 0.1);
+    --shadow-lg: 8px 8px 0px 0px hsl(221 39% 11% / 0.15);
+    --shadow-xl: 12px 12px 0px 0px hsl(221 39% 11% / 0.2);
+    --shadow-glow: 0 0 20px hsl(153 60% 53% / 0.4);
 
     /* Transições suaves */
     --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
@@ -100,68 +96,59 @@
     --popover: 240 12% 20%;
     --popover-foreground: 210 20% 98%;
 
-    /* Cores primárias - azul claro #60A5FA para destaques */
-    --primary: 217 91% 70%;
+    /* Cores primárias - Neon Green Tech para destaques */
+    --primary: 153 60% 53%;
     --primary-foreground: 240 12% 15%;
-    --primary-light: 217 91% 85%;
-    --primary-glow: 217 91% 75%;
+    --primary-light: 153 60% 80%;
+    --primary-glow: 153 60% 50%;
 
-    /* Amarelo claro #FDE68A para ícones/alertas */
-    --secondary: 48 96% 76%;
+    /* Laranja/Amarelo #FDE68A para alertas */
+    --secondary: 48 96% 60%;
     --secondary-foreground: 240 12% 15%;
     --secondary-light: 48 96% 85%;
 
     /* Cores neutras modernas */
-    --muted: 240 12% 20%;
+    --muted: 240 12% 15%;
     --muted-foreground: 156 163 175;
-    /* #9CA3AF (cinza médio) */
 
-    --accent: 240 12% 20%;
+    --accent: 240 12% 18%;
     --accent-foreground: 210 20% 98%;
 
     /* Cores de status dark */
     --success: 158 64% 52%;
-    /* #34D399 */
     --success-foreground: 240 12% 15%;
     --warning: 45 97% 54%;
-    /* #FBBF24 */
     --warning-foreground: 240 12% 15%;
     --destructive: 0 84% 60%;
-    /* #F87171 */
     --destructive-foreground: 210 20% 98%;
 
     /* Elementos de interface */
-    --border: 240 12% 25%;
-    /* #3B3B4D (cinza profundo) */
-    --input: 240 12% 20%;
-    --ring: 217 91% 70%;
+    --border: 240 12% 30%;
+    --input: 240 12% 18%;
+    --ring: 153 60% 53%;
 
     /* Sidebar dark mode */
-    --sidebar-background: 240 12% 18%;
-    /* #1E1E2F */
+    --sidebar-background: 240 12% 12%;
     --sidebar-foreground: 210 20% 98%;
-    /* #F9FAFB */
-    --sidebar-primary: 48 96% 53%;
-    /* #FACC15 - amarelo para ativo */
-    --sidebar-primary-foreground: 240 12% 18%;
-    --sidebar-accent: 215 20% 30%;
-    /* #334155 - hover */
+    --sidebar-primary: 153 60% 53%;
+    --sidebar-primary-foreground: 240 12% 12%;
+    --sidebar-accent: 215 20% 20%;
     --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 220 13% 18%;
-    --sidebar-ring: 48 96% 53%;
+    --sidebar-border: 240 12% 20%;
+    --sidebar-ring: 153 60% 53%;
 
     /* Gradientes dark mode */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 70%), hsl(217 91% 75%));
-    --gradient-secondary: linear-gradient(135deg, hsl(48 96% 76%), hsl(48 96% 80%));
-    --gradient-hero: linear-gradient(135deg, hsl(221 39% 11%) 0%, hsl(240 12% 15%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(240 12% 20%) 0%, hsl(240 12% 15%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(153 60% 53%), hsl(153 60% 63%));
+    --gradient-secondary: linear-gradient(135deg, hsl(48 96% 60%), hsl(48 96% 70%));
+    --gradient-hero: repeating-linear-gradient(45deg, hsl(240 12% 15%), hsl(240 12% 15%) 10px, hsl(240 12% 14%) 10px, hsl(240 12% 14%) 20px);
+    --gradient-card: linear-gradient(145deg, hsl(240 12% 18%) 0%, hsl(240 12% 14%) 100%);
 
-    /* Sombras dark mode - box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) */
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.2);
-    --shadow-md: 0 2px 12px 0 hsl(0 0% 0% / 0.3);
-    --shadow-lg: 0 4px 16px -2px hsl(0 0% 0% / 0.4);
-    --shadow-xl: 0 8px 30px -5px hsl(0 0% 0% / 0.5);
-    --shadow-glow: 0 0 30px hsl(48 96% 76% / 0.3);
+    /* Sombras duras dark mode */
+    --shadow-sm: 4px 4px 0px 0px hsl(0 0% 0% / 0.5);
+    --shadow-md: 6px 6px 0px 0px hsl(0 0% 0% / 0.7);
+    --shadow-lg: 8px 8px 0px 0px hsl(0 0% 0% / 0.8);
+    --shadow-xl: 12px 12px 0px 0px hsl(0 0% 0% / 1);
+    --shadow-glow: 0 0 25px hsl(153 60% 53% / 0.3);
   }
 }
 
@@ -172,7 +159,6 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-feature-settings: "rlig" 1, "calt" 1;
   }
 
   /* Scrollbar personalizada */
@@ -210,15 +196,16 @@
     animation: slideUp 0.3s ease-out;
   }
 
-  /* Efeitos hover elegantes */
+  /* Efeitos hover brutais/tech */
   .hover-lift {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.1s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.1s cubic-bezier(0, 0, 0.2, 1);
   }
 
   .hover-lift:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    transform: translate(-4px, -4px);
+    box-shadow: var(--shadow-xl);
   }
+
 
   /* Gradientes de texto */
   .text-gradient-primary {

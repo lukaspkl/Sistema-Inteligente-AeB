@@ -11,7 +11,10 @@ import ABNotasFiscais from "./pages/ABNotasFiscais";
 import ABPerdas from "./pages/ABPerdas";
 import ABRelatorios from "./pages/ABRelatorios";
 import ABConfiguracoes from "./pages/ABConfiguracoes";
+import ABEventos from "./pages/ABEventos";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -20,18 +23,22 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <Layout>
-        <Routes>
-          <Route path="/" element={<ABDashboard />} />
-          <Route path="/estoque" element={<ABEstoque />} />
-          <Route path="/compras" element={<ABCompras />} />
-          <Route path="/notas-fiscais" element={<ABNotasFiscais />} />
-          <Route path="/perdas" element={<ABPerdas />} />
-          <Route path="/relatorios" element={<ABRelatorios />} />
-          <Route path="/configuracoes" element={<ABConfiguracoes />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Layout>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Layout><ABDashboard /></Layout>} />
+          <Route path="/estoque" element={<Layout><ABEstoque /></Layout>} />
+          <Route path="/compras" element={<Layout><ABCompras /></Layout>} />
+          <Route path="/notas-fiscais" element={<Layout><ABNotasFiscais /></Layout>} />
+          <Route path="/perdas" element={<Layout><ABPerdas /></Layout>} />
+          <Route path="/relatorios" element={<Layout><ABRelatorios /></Layout>} />
+          <Route path="/eventos" element={<Layout><ABEventos /></Layout>} />
+          <Route path="/configuracoes" element={<Layout><ABConfiguracoes /></Layout>} />
+        </Route>
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </TooltipProvider>
   </QueryClientProvider>
 );

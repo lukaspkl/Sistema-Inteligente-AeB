@@ -9,21 +9,21 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground border-2 border-transparent hover:border-primary shadow-[2px_2px_0_0_hsl(var(--primary-glow))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_hsl(var(--primary-glow))] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground border-2 border-transparent hover:border-destructive shadow-[2px_2px_0_0_hsl(var(--destructive))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_hsl(var(--destructive))] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border-2 border-input bg-background shadow-[2px_2px_0_0_hsl(var(--border))] hover:bg-accent hover:text-accent-foreground hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_hsl(var(--border))] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground border-2 border-transparent hover:border-secondary shadow-[2px_2px_0_0_hsl(var(--secondary))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_hsl(var(--secondary))] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all",
+        ghost: "hover:bg-accent hover:text-accent-foreground border-2 border-transparent",
+        link: "text-primary underline-offset-4 hover:underline border-2 border-transparent",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        default: "h-10 px-4 py-2 font-bold uppercase tracking-wider text-xs",
+        sm: "h-9 rounded border-2 px-3 tracking-wide text-[10px] uppercase font-bold",
+        lg: "h-11 rounded border-2 px-8 uppercase font-bold tracking-widest",
+        icon: "h-10 w-10 border-2",
       },
     },
     defaultVariants: {
@@ -35,7 +35,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean
 }
 

@@ -102,66 +102,98 @@ export default function ABDashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between animate-in fade-in slide-in-from-top-4 duration-500">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+          <h1 className="text-3xl md:text-5xl font-black tracking-tighter flex items-center gap-4 mb-2">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
               <ShoppingCart className="h-6 w-6" />
             </div>
             Alimentos & Bebidas
           </h1>
-          <p className="text-muted-foreground">
-            Gestão inteligente de estoque, compras e operações
+          <p className="text-muted-foreground font-medium flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+            Sistema Ativo • Gestão de métricas e operações em tempo real
           </p>
         </div>
-
       </div>
 
-      {/* Métricas Principais */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="bg-card shadow-elegant-md border-0 rounded-xl hover-lift">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Vendas Hoje</CardTitle>
-            <TrendingUp className="h-5 w-5 text-success" />
+      {/* Métricas Principais - Assimetria Tipográfica (Bold & Tech) */}
+      <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-12 animate-in fade-in slide-in-from-bottom-8 duration-700 fade-in-0">
+        {/* BIG Card: Vendas Hoje */}
+        <Card className="md:col-span-3 lg:col-span-8 bg-card shadow-elegant-md border-0 rounded-2xl hover-lift relative overflow-hidden group">
+          {/* Fundo abstrato tech para trazer vida */}
+          <div className="absolute -right-20 -top-20 w-64 h-64 bg-success/5 rounded-full blur-3xl group-hover:bg-success/10 transition-colors duration-700" />
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+            <TrendingUp className="w-64 h-64 text-success" />
+          </div>
+
+          <CardHeader className="flex flex-row items-center justify-between pb-2 relative z-10">
+            <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground/80">
+              Desempenho Diário
+            </CardTitle>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-success/10">
+              <TrendingUp className="h-5 w-5 text-success" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-success mb-1">{metricas.vendasDia}</div>
-            <p className="text-xs text-muted-foreground">+15.2% vs ontem</p>
+          <CardContent className="relative z-10 pt-4 pb-8">
+            <div className="flex items-baseline gap-4 mb-2">
+              <div className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-foreground drop-shadow-sm">
+                <span className="text-3xl md:text-4xl text-muted-foreground font-bold mr-1 align-top">R$</span>
+                {metricas.vendasDia.replace('R$ ', '')}
+              </div>
+            </div>
+            <div className="flex items-center gap-2 mt-4 inline-flex px-3 py-1.5 rounded-full bg-success/10 text-success border border-success/20">
+              <TrendingUp className="h-4 w-4" />
+              <span className="text-sm font-bold tracking-wide">+15.2% vs ontem</span>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-card shadow-elegant-md border-0 rounded-xl hover-lift">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">CMV</CardTitle>
-            <BarChart3 className="h-5 w-5 text-secondary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-secondary mb-1">{metricas.cmv}</div>
-            <p className="text-xs text-muted-foreground">Meta: 30%</p>
-          </CardContent>
-        </Card>
+        {/* Vertical Stack: Outras Métricas */}
+        <div className="md:col-span-3 lg:col-span-4 flex flex-col gap-4">
+          <Card className="flex-1 bg-card shadow-elegant-md border-0 rounded-2xl hover-lift group relative overflow-hidden">
+            <div className="absolute -right-8 -top-8 w-32 h-32 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/10 transition-colors duration-500" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 relative z-10">
+              <CardTitle className="text-xs font-semibold uppercase text-muted-foreground">CMV (Custo Mercadoria)</CardTitle>
+              <BarChart3 className="h-4 w-4 text-secondary opacity-70 group-hover:opacity-100 transition-opacity" />
+            </CardHeader>
+            <CardContent className="pb-4 relative z-10">
+              <div className="text-3xl font-bold tracking-tight text-foreground">{metricas.cmv}</div>
+              <p className="text-xs font-medium text-muted-foreground mt-1">Meta corporativa: <span className="text-secondary/80">30%</span></p>
+            </CardContent>
+          </Card>
 
-        <Card className="bg-card shadow-elegant-md border-0 rounded-xl hover-lift">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Estoque</CardTitle>
-            <Package className="h-5 w-5 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-primary mb-1">{metricas.itensEstoque}</div>
-            <p className="text-xs text-muted-foreground">Valor: {metricas.estoqueValor}</p>
-          </CardContent>
-        </Card>
+          <Card className="flex-1 bg-card shadow-elegant-md border-0 rounded-2xl hover-lift group relative overflow-hidden">
+            <div className="absolute -right-8 -top-8 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-500" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 relative z-10">
+              <CardTitle className="text-xs font-semibold uppercase text-muted-foreground">Volume de Estoque</CardTitle>
+              <Package className="h-4 w-4 text-primary opacity-70 group-hover:opacity-100 transition-opacity" />
+            </CardHeader>
+            <CardContent className="pb-4 relative z-10 flex justify-between items-end">
+              <div>
+                <div className="text-3xl font-bold tracking-tight text-foreground">{metricas.itensEstoque} <span className="text-sm font-normal text-muted-foreground tracking-normal block -mt-1">itens</span></div>
+              </div>
+              <div className="text-right">
+                <p className="text-xs font-medium text-muted-foreground mb-1 uppercase tracking-wider text-[10px]">Capital Alocado</p>
+                <p className="text-sm font-bold text-primary">{metricas.estoqueValor}</p>
+              </div>
+            </CardContent>
+          </Card>
 
-        <Card className="bg-card shadow-elegant-md border-0 rounded-xl hover-lift">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Perdas</CardTitle>
-            <TrendingDown className="h-5 w-5 text-destructive" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-destructive mb-1">{metricas.perdas}</div>
-            <p className="text-xs text-muted-foreground">{metricas.perdasPercentual} do total</p>
-          </CardContent>
-        </Card>
+          <Card className="flex-1 bg-card shadow-elegant-md border-0 rounded-2xl hover-lift group relative overflow-hidden">
+            <div className="absolute -right-8 -top-8 w-32 h-32 bg-destructive/5 rounded-full blur-2xl group-hover:bg-destructive/10 transition-colors duration-500" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 relative z-10">
+              <CardTitle className="text-xs font-semibold uppercase text-muted-foreground">Controle de Perdas</CardTitle>
+              <TrendingDown className="h-4 w-4 text-destructive opacity-70 group-hover:opacity-100 transition-opacity" />
+            </CardHeader>
+            <CardContent className="pb-4 relative z-10 flex items-center justify-between">
+              <div className="text-3xl font-bold tracking-tight text-foreground">{metricas.perdas}</div>
+              <div className="px-2 py-1 rounded bg-destructive/10 text-destructive text-xs font-bold border border-destructive/20">
+                {metricas.perdasPercentual} do total
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Conteúdo Principal */}

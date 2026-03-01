@@ -1,4 +1,4 @@
-import { Bell, Search, User, Menu, MessageSquare, Sun, Moon } from "lucide-react";
+import { Bell, Search, User, Menu, MessageSquare, Sun, Moon, LogOut } from "lucide-react";
 import { useTheme } from "next-themes";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -12,32 +12,55 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
-  
-  // Simulando usuário logado
+  const [sessionUser, setSessionUser] = useState<any>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
+      setSessionUser(session?.user);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+      setSessionUser(session?.user);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/login');
+  };
+
   const user = {
-    name: "João Silva",
-    role: "Gerente A&B",
-    avatar: "JS",
-    aiUsage: 15, // prompts utilizados no mês
-    aiLimit: 50 // limite mensal
+    name: sessionUser ? sessionUser.email.split('@')[0] : "Carregando...",
+    role: sessionUser?.user_metadata?.company_name || 'Autenticando',
+    avatar: sessionUser ? sessionUser.email.substring(0, 2).toUpperCase() : "AA",
+    aiUsage: 15,
+    aiLimit: sessionUser?.user_metadata?.plan === 'hotel' ? 500 : 50
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b-2 border-border shadow-[0_4px_0_0_hsl(var(--shadow-md)/0.1)] bg-background">
       <div className="flex h-16 items-center justify-between px-4">
         {/* Left side */}
         <div className="flex items-center gap-4">
           <SidebarTrigger className="text-foreground hover:bg-accent hover:text-accent-foreground" />
-          
+
           {/* Search */}
           <div className="relative hidden md:flex">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Buscar no sistema..."
-              className="w-64 pl-10 bg-muted/50"
+              className="w-64 pl-10 bg-background border-2 border-border focus-visible:ring-0 focus-visible:border-primary transition-colors rounded-none"
             />
           </div>
         </div>
@@ -45,9 +68,9 @@ export function Header() {
         {/* Right side */}
         <div className="flex items-center gap-3">
           {/* AI Usage Indicator */}
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 shadow-sm">
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-none bg-primary/10 border-2 border-primary shadow-[2px_2px_0_0_hsl(var(--primary))] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_hsl(var(--primary))] transition-all">
             <MessageSquare className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium text-primary">
+            <span className="text-sm font-bold tracking-tight text-primary">
               IA: {user.aiUsage}/{user.aiLimit}
             </span>
           </div>
@@ -67,8 +90,8 @@ export function Header() {
           {/* Notifications */}
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5" />
-            <Badge 
-              variant="destructive" 
+            <Badge
+              variant="destructive"
               className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
             >
               3
@@ -78,8 +101,8 @@ export function Header() {
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-3 px-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
+              <Button variant="ghost" className="flex items-center gap-3 px-3 hover:bg-accent hover:text-accent-foreground border-2 border-transparent hover:border-border rounded-none transition-colors">
+                <div className="flex h-8 w-8 items-center justify-center rounded-none bg-primary text-primary-foreground text-sm font-bold shadow-[2px_2px_0_0_hsl(var(--primary-glow))]">
                   {user.avatar}
                 </div>
                 <div className="hidden sm:block text-left">
@@ -105,8 +128,9 @@ export function Header() {
                 Histórico IA ({user.aiUsage} prompts)
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
-                Sair
+              <DropdownMenuItem className="text-destructive focus:bg-destructive focus:text-destructive-foreground cursor-pointer" onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Sair do Sistema
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
